@@ -13,7 +13,8 @@ mageRoot=/var/www/html
 # Final output for support
 logCombined=~/sa_output.txt
 
-vmstat 1 10 >$logCombined
+sysctl -a >$logCombined
+vmstat 1 10 >>$logCombined
 mysql -e "show global status" >>$logCombined
 mysql -e "show global variables" >>$logCombined
 netstat -nap >>$logCombined
