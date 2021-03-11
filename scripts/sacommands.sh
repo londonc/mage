@@ -15,7 +15,14 @@ logCombined=~/sa_output.txt
 
 sysctl -a >$logCombined
 vmstat 1 10 >>$logCombined
-nginx -v >>$logCombined
+
+# Web servers
+if [[ $(ps -e | grep nginx) ]]; then echo -e "${green}Nginx running"; nginx -v >>$logCombined; 
+elif [[ $(ps -e | grep httpd) ]]; then echo -e "${green}Apache running"; httpd -v >>$logCombined; 
+elif [[ $(ps -e | grep apache) ]]; then echo -e "${green}Apache running"; apache -v >>$logCombined; 
+else echo -e "${red}Web server not found or running!${reset}"; 
+fi
+
 mysql -e "show global status" >>$logCombined
 mysql -e "show global variables" >>$logCombined
 netstat -nap >>$logCombined
