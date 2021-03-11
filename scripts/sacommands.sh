@@ -40,6 +40,8 @@ php -v >$logPHP
 php -m >>$logPHP
 if [[ $(cat $logPHP | grep "OPcache") ]]; then echo -e "${green}OPcache found.${reset}"; else echo "${red}OPcache not found! Strongly recommend fixing.${reset}"; fi
 php -i >>$logPHP
+if [[ $(cat $logPHP | grep "session.gc_maxlifetime " | awk '{print $3}') -gt 1440 ]]; then echo "${yellow}session.gc_lifetime set higher than recommended.${reset}";fi
+if [[ $(cat $logPHP | grep "opcache.enable " | awk '{print $3}') == 'Off' ]]; then echo "${red}OPcache not enabled! Strongly recommend fixing.${reset}"; fi
 ## Create header and combine
 echo "### PHP ###" >> $logCombined
 cat $logPHP >> $logCombined
